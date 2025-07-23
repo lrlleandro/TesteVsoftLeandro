@@ -16,7 +16,8 @@ public class ServiceCollectionExtensionsUnitTests
 {
     private IServiceCollection _services;
     private IConfiguration _configuration;
-    
+
+    private readonly Assembly _applicationAssembly = typeof(TesteVsoft.Infrastructure.Tests.Common.Assemblies.AssemblyReference).Assembly;
     private readonly Assembly _infrastructureAssembly = typeof(TesteVsoft.Infrastructure.Tests.Common.Assemblies.AssemblyReference).Assembly;
 
     [SetUp]
@@ -36,7 +37,7 @@ public class ServiceCollectionExtensionsUnitTests
         var configuration = new ConfigurationBuilder().Build();
 
         // Act
-        services.AddInfrastructureServices(configuration, _infrastructureAssembly);
+        services.AddInfrastructureServices(configuration, _applicationAssembly, _infrastructureAssembly);
 
         var serviceProvider = services.BuildServiceProvider();
 

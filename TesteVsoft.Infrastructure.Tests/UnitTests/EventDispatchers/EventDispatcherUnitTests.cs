@@ -5,7 +5,7 @@ using TesteVsoft.Infrastructure.Tests.Fakes;
 using TesteVsoft.Application.Interfaces.CQRS;
 using TesteVsoft.Infrastructure.Common.EventDispatchers;
 
-namespace TesteVsoft.Infrastructure.Fakes.UnitFakes.EventDispatchers;
+namespace TesteVsoft.Infrastructure.Tests.UnitTests.EventDispatchers;
 
 [TestFixture]
 public class EventDispatcherUnitFakes

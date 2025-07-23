@@ -4,15 +4,20 @@ using System.Reflection;
 using TesteVsoft.Application.Interfaces.CQRS;
 using TesteVsoft.Infrastructure.Common.Attributes;
 using TesteVsoft.Infrastructure.Common.EventDispatchers;
+using TesteVsoft.Infrastructure.Data;
 
 namespace TesteVsoft.Infrastructure.Common.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration, Assembly infrastructureAssembly)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration, Assembly applicationAssembly, Assembly infrastructureAssembly)
     {
         services.AddServicesWithAttributes(infrastructureAssembly);
-        
+        services.AddEventDispatcher(applicationAssembly);
+
+        var connectionString = configuration.GetConnectionString("teste-vsoft-db");
+        services.AddNpgsql<ApplicationDbContext>(connectionString);
+
         return services;
     }
 

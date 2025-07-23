@@ -1,4 +1,4 @@
-namespace TesteVsoft.Infrastructure.Common.Assemblies;
+namespace TesteVsoft.Application.Common.Assemblies;
 
 public static class AssemblyReference
 {
