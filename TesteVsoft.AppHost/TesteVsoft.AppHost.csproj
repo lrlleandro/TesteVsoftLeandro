@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TesteVsoft.ApiService\TesteVsoft.ApiService.csproj" />
-    <ProjectReference Include="..\TesteVsoft.Web\TesteVsoft.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
