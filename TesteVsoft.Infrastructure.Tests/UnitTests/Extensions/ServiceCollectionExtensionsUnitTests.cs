@@ -1,7 +1,11 @@
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
+using System.Runtime.ConstrainedExecution;
+using TesteVsoft.Application.Interfaces.CQRS;
+using TesteVsoft.Infrastructure.Common.EventDispatchers;
 using TesteVsoft.Infrastructure.Common.Extensions;
 using TesteVsoft.Infrastructure.Tests.Fakes;
 
@@ -57,5 +61,50 @@ public class ServiceCollectionExtensionsUnitTests
         provider.GetService<IFakeSingletonService>().Should().NotBeNull();
         provider.GetService<FakeTransientService>().Should().NotBeNull();
         provider.GetService<FakeTransientService>().Should().NotBeNull();
+    }
+
+    [Test]
+    public void AddEventDispatcher_ShouldRegisterAllHandlersAndResolver()
+    {
+        // Act
+        _services.AddEventDispatcher(_infrastructureAssembly);
+
+        // Assert
+        var dispatcherDescriptor = _services.FirstOrDefault(d => d.ServiceType == typeof(IEventDispatcher));
+        dispatcherDescriptor.Should().NotBeNull();
+        dispatcherDescriptor!.Lifetime.Should().Be(ServiceLifetime.Transient);
+
+        var resolverDescriptor = _services.FirstOrDefault(d => d.ServiceType == typeof(IHandlerResolver));
+        resolverDescriptor.Should().NotBeNull();
+        resolverDescriptor!.Lifetime.Should().Be(ServiceLifetime.Singleton);
+        resolverDescriptor.ImplementationInstance.Should().BeOfType<HandlerResolver>();
+
+        var handlerResolver = (HandlerResolver)resolverDescriptor.ImplementationInstance!;
+
+        handlerResolver.GetHandlerTypesByTypeName(nameof(FakeCommand))
+            .Should()
+            .NotBeNull();
+
+        handlerResolver.GetHandlerTypesByTypeName(nameof(FakeCommandWithResponse))
+            .Should()
+            .NotBeNull();
+
+        handlerResolver.GetHandlerTypesByTypeName(nameof(FakeQuery))
+            .Should()
+            .NotBeNull();
+
+        handlerResolver.GetHandlerTypesByNotificationTypeName(nameof(FakeNotification))
+            .Should()
+            .HaveCount(2);
+
+        handlerResolver.GetHandlerTypesByNotificationTypeName(nameof(FakeNotification))
+            .Should()
+            .NotBeNull();
+
+        _services.Should().Contain(sd => sd.ServiceType == typeof(FakeNotificationHandler));
+        _services.Should().Contain(sd => sd.ServiceType == typeof(FakeNotificationHandler2));
+        _services.Should().Contain(sd => sd.ServiceType == typeof(FakeCommandHandler));
+        _services.Should().Contain(sd => sd.ServiceType == typeof(FakeCommandWithResponseHandler));
+        _services.Should().Contain(sd => sd.ServiceType == typeof(FakeQueryHandler));
     }
 }
