@@ -12,7 +12,7 @@ public sealed class EventDispatcher(IServiceProvider serviceProvider, IHandlerRe
 
         var tasks = new List<Task>();
 
-        foreach (var handlerType in handlerTypes)
+        foreach (var handlerType in handlerTypes!)
         {
             var handler = serviceProvider.GetService(handlerType);
 
@@ -48,7 +48,7 @@ public sealed class EventDispatcher(IServiceProvider serviceProvider, IHandlerRe
 
         if (handlerMethod is not null)
         {
-            await (Task)handlerMethod.Invoke(handler, [command, cancellationToken]);
+            await (Task)handlerMethod.Invoke(handler, [command, cancellationToken])!;
         }
     }
 
@@ -65,7 +65,7 @@ public sealed class EventDispatcher(IServiceProvider serviceProvider, IHandlerRe
         var handlerMethod = handlerType.GetMethod("Handle")
             ?? throw new InvalidOperationException($"O handler {handlerType.Name} não possui o método Handle");
 
-        var response = await (Task<TResponse>)handlerMethod.Invoke(handler, [command, cancellationToken]);
+        var response = await (Task<TResponse>)handlerMethod.Invoke(handler, [command, cancellationToken])!;
         return response;
     }
 

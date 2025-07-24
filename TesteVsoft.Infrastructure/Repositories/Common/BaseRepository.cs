@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using TesteVsoft.Infrastructure.Data;
-using TesteVsoft.Application.Common.Models;
 using TesteVsoft.Application.Common.Enums;
+using TesteVsoft.Application.Common.Models;
 using TesteVsoft.Application.Interfaces.Repositories.Common;
 using TesteVsoft.Domain.Entities.Common;
+using TesteVsoft.Infrastructure.Data;
 
 namespace TesteVsoft.Infrastructure.Repositories.Common;
 

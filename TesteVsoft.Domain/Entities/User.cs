@@ -38,6 +38,11 @@ public class User : BaseEntity<Guid>
 
     public static User CreateRandom(string mask)
     {
+        if (!mask.Contains("{{random}}"))
+        {
+            throw new ValidationException("A máscara deve conter o marcador {{random}} para gerar valores aleatórios.");
+        }
+
         var random = GenerateRandomString(8);
         var userName = mask.Replace("{{random}}", random);
         return new User($"User {random}", userName, "password", null);

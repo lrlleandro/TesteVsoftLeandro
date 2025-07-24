@@ -95,6 +95,17 @@ public class UserUnitTests
     }
 
     [Test]
+    public void CreateRandom_ShouldThowWhenMaskPatternIsNotPresent()
+    {
+        // Arrange & Act
+        var act = () => User.CreateRandom("user_");
+
+        // Assert
+        act.Should().Throw<ValidationException>()
+           .WithMessage("A máscara deve conter o marcador {{random}} para gerar valores aleatórios.");
+    }
+
+    [Test]
     public void Login_WithCorrectPassword_ShouldUpdateLastLoginAndReturnTrue()
     {
         // Arrange

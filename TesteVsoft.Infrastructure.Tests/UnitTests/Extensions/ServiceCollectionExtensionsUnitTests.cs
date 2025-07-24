@@ -1,9 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Reflection;
-using System.Runtime.ConstrainedExecution;
 using TesteVsoft.Application.Interfaces.CQRS;
 using TesteVsoft.Infrastructure.Common.EventDispatchers;
 using TesteVsoft.Infrastructure.Common.Extensions;

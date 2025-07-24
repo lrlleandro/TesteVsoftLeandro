@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using TesteVsoft.Infrastructure.Tests.Fakes;
 using TesteVsoft.Application.Interfaces.CQRS;
 using TesteVsoft.Infrastructure.Common.EventDispatchers;
+using TesteVsoft.Infrastructure.Tests.Fakes;
 
 namespace TesteVsoft.Infrastructure.Tests.UnitTests.EventDispatchers;
 
