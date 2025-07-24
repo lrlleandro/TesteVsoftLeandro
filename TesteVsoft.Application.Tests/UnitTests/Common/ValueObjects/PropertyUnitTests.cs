@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using NUnit.Framework.Internal;
+using System.ComponentModel.DataAnnotations;
 using TesteVsoft.Application.Common.ValueObjects;
 using TesteVsoft.Application.Tests.Fakes;
 
@@ -6,16 +8,16 @@ namespace TesteVsoft.Application.Tests.UnitTests.Common.ValueObjects;
 
 public partial class PropertyUnitTests
 {
-    [Test]
-    public void Constructor_Should_Throw_When_PropertyName_Is_Null_Or_Empty()
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void Constructor_Should_Throw_When_PropertyName_Is_Null_Or_Empty(string? propertyName)
     {
         // Arrande & Act
-        var act1 = () => new Property<FakeEntity, Guid>(null!);
-        var act2 = () => new Property<FakeEntity, Guid>("");
-
+        var act = () => new Property<FakeEntity, Guid>(propertyName!);
+        
         // Assert
-        act1.Should().Throw<ArgumentException>().WithMessage("*Property name cannot be null or empty*");
-        act2.Should().Throw<ArgumentException>().WithMessage("*Property name cannot be null or empty*");
+        act.Should().Throw<ValidationException>().WithMessage("O nome da propriedade é obrigatório");
     }
 
     [Test]
@@ -25,8 +27,8 @@ public partial class PropertyUnitTests
         var act = () => new Property<FakeEntity, Guid>("NonExistent");
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-           .WithMessage("Property 'NonExistent' does not exist on type 'FakeEntity'.*");
+        act.Should().Throw<ValidationException>()
+           .WithMessage($"A propriedade 'NonExistent' não existe no tipo '{typeof(FakeEntity).Name}'");
     }
 
     [Test]
