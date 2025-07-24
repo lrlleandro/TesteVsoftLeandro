@@ -1,4 +1,5 @@
 using Bogus;
+using Bogus.DataSets;
 using FluentAssertions;
 using TesteVsoft.Domain.Entities;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
@@ -14,6 +15,21 @@ public class UserUnitTests
     public void Setup()
     {
         _faker = new Faker("pt_BR");
+    }
+
+    [Test]
+    public void EmptyConstructor_ShouldInializeDefaultProperties()
+    {
+        // Arrange & Act
+        var user = Activator.CreateInstance(typeof(User), true) as User;
+
+        // Assert
+        user.Name.Should().BeNull();
+        user.UserName.Should().BeNull();
+        user.Password.Should().BeNull();
+        user.Password.Should().BeNull(); 
+        user.Email.Should().BeNull();
+        user.LastLoginOn.Should().BeNull();
     }
 
     [Test]
@@ -152,7 +168,7 @@ public class UserUnitTests
         var password = _faker.Internet.Password();
 
         // Act
-        var user = User.Create(_faker.Name.FullName(), _faker.Internet.UserName(), "Senha123", _faker.Internet.Email());
+        var user = User.Create(_faker.Name.FullName(), _faker.Internet.UserName(), password, _faker.Internet.Email());
 
         var originalName = user.Name;
         var originalUserName = user.UserName;

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.6.3" />
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,11 +25,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TesteVsoft.Application\TesteVsoft.Application.csproj" />
-    <ProjectReference Include="..\TesteVsoft.Infastructure\TesteVsoft.Infastructure.csproj" />
+    <ProjectReference Include="..\TesteVsoft.Infrastructure\TesteVsoft.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

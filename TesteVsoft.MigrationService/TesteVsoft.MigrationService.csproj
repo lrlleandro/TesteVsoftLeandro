@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TesteVsoft.Infastructure\TesteVsoft.Infastructure.csproj" />
+    <ProjectReference Include="..\TesteVsoft.Infrastructure\TesteVsoft.Infrastructure.csproj" />
     <ProjectReference Include="..\TesteVsoft.ServiceDefaults\TesteVsoft.ServiceDefaults.csproj" />
   </ItemGroup>
 
