@@ -39,12 +39,20 @@ O projeto segue uma arquitetura limpa (Clean Architecture) com as seguintes cama
    - .NET 8 SDK
    - Node.js
 
+**Configurações de E-mail e SMTP:**
+Antes de rodar o projeto, certifique-se de preencher suas informações de e-mail e SMTP no arquivo `TesteVsoft.ApiService/appsettings.json`.
+
 2. Comandos:
 ```bash
 dotnet run --project TesteVsoft.AppHost/TesteVsoft.AppHost.csproj
 ```
 
 Após a execução, o dashboard do Aspire estará disponível em: <mcurl name="https://localhost:17126/" url="https://localhost:17126/"></mcurl>
+
+**Credenciais de Acesso (Frontend):**
+Para o primeiro acesso ao frontend, utilize as seguintes credenciais:
+- **Usuário:** `admin`
+- **Senha:** `vsoft`
 
 ### Migrações
 Para adicionar uma nova migração, execute o script PowerShell:
@@ -54,9 +62,6 @@ Para adicionar uma nova migração, execute o script PowerShell:
 ```bash
 # Unitários
 cd TesteVsoft.Application.Tests && dotnet test
-
-# Integração
-cd TesteVsoft.ApiService.Tests && dotnet test
 
 # Relatório de Cobertura de Código
 Para gerar o relatório de cobertura de código, execute o script PowerShell:
