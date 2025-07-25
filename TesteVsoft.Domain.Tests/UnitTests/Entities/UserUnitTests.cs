@@ -24,7 +24,7 @@ public class UserUnitTests
         var user = Activator.CreateInstance(typeof(User), true) as User;
 
         // Assert
-        user.Name.Should().BeNull();
+        user!.Name.Should().BeNull();
         user.UserName.Should().BeNull();
         user.Password.Should().BeNull();
         user.Password.Should().BeNull(); 

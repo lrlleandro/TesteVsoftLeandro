@@ -213,9 +213,11 @@ public class UserTaskRepositoryIntegrationTests
         var newTitle = _faker.Lorem.Word();
         var newDescription = _faker.Lorem.Paragraph();
         var newAssignedUser = CreateUser();
-        var newDueDate = _faker.Date.Future();
+        var newDueDate = _faker.Date.Future().ToUniversalTime();
         var newStatus = _faker.Random.Enum<UserTaskStatusTypes>();
-        
+
+        _context.Set<User>().Add(newAssignedUser);
+        await _context.SaveChangesAsync();
         userTask.Update(newTitle, newDescription, newDueDate, newStatus, newAssignedUser);
 
         // Act
@@ -246,11 +248,13 @@ public class UserTaskRepositoryIntegrationTests
         var newDescription2 = _faker.Lorem.Paragraph();
         var newAssignedUser1 = CreateUser();
         var newAssignedUser2 = CreateUser();
-        var newDueDate1 = _faker.Date.Future();
-        var newDueDate2 = _faker.Date.Future();
+        var newDueDate1 = _faker.Date.Future().ToUniversalTime();
+        var newDueDate2 = _faker.Date.Future().ToUniversalTime();
         var newStatus1 = _faker.Random.Enum<UserTaskStatusTypes>();
         var newStatus2 = _faker.Random.Enum<UserTaskStatusTypes>();
 
+        _context.Set<User>().AddRange([newAssignedUser1, newAssignedUser2]);
+        await _context.SaveChangesAsync();
         UserTask1.Update(newTitle1, newDescription1, newDueDate1, newStatus1, newAssignedUser1);
         UserTask2.Update(newTitle2, newDescription2, newDueDate2, newStatus2, newAssignedUser2);
 

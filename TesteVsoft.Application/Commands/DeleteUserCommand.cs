@@ -22,7 +22,7 @@ public class DeleteUserCommandHandler(IUserRepository userRepository) : ICommand
 
         if (user is null)
         {
-            throw new NotFoundException($"User with id {command.Id} not found.");
+            throw new NotFoundException($"Usuário não encontrado.");
         }
 
         await userRepository.RemoveAsync(user, cancellationToken);

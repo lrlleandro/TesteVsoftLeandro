@@ -1,9 +1,5 @@
 using FluentAssertions;
 using Moq;
-using NUnit.Framework;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using TesteVsoft.Application.Commands;
 using TesteVsoft.Application.Common.Exceptions;
 using TesteVsoft.Application.Interfaces.Repositories;
@@ -63,7 +59,7 @@ public class DeleteUserCommandHandlerUnitTests
 
         // Assert
         act.Should().ThrowAsync<NotFoundException>()
-           .WithMessage($"User with id {userId} not found.");
+           .WithMessage($"Usuário não encontrado.");
 
         _userRepositoryMock.Verify(r => r.RemoveAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Never);
     }
