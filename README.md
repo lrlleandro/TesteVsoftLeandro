@@ -44,7 +44,8 @@ O projeto segue uma arquitetura limpa (Clean Architecture) com as seguintes cama
 dotnet run --project TesteVsoft.AppHost/TesteVsoft.AppHost.csproj
 ```
 
-Após a execução, o dashboard do Aspire estará disponível em: <mcurl name="https://localhost:17126/" url="https://localhost:17126/"></mcurl>
+Após a execução, o dashboard do Aspire estará disponível em:
+[https://localhost:17126/](https://localhost:17126/)
 
 ### Migrações
 Para adicionar uma nova migração, execute o script PowerShell:
