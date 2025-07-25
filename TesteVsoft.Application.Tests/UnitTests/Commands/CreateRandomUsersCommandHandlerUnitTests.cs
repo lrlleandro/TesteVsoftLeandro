@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
+using System.ComponentModel.DataAnnotations;
 using TesteVsoft.Application.Commands;
 using TesteVsoft.Application.Interfaces.BackgroundServices;
 using TesteVsoft.Application.Interfaces.Repositories;
-using TesteVsoft.Domain.Entities;
 
 namespace TesteVsoft.Application.Tests.Commands;
 

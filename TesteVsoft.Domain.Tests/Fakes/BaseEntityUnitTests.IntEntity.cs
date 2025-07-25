@@ -2,13 +2,13 @@
 
 namespace TesteVsoft.Domain.Tests.Fakes;
 
-public class IntEntity : BaseEntity<int> 
-{ 
-    public IntEntity() : base() 
-    { 
-    } 
+public class IntEntity : BaseEntity<int>
+{
+    public IntEntity() : base()
+    {
+    }
 
-    public IntEntity(int id) : base(id) 
-    { 
-    } 
+    public IntEntity(int id) : base(id)
+    {
+    }
 }

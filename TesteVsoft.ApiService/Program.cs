@@ -83,6 +83,7 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -137,5 +138,6 @@ app.UseAuthorization();
 
 app.MapLoginEndpoints();
 app.MapUsersEndpoints();
+app.MapUserTasksEndpoints();
 
 app.Run();

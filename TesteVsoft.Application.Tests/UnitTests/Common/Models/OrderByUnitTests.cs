@@ -36,10 +36,10 @@ public class OrderByUnitTests
             PropertyName = new Property<FakeEntity, Guid>("Name"),
             Direction = OrderDirectionTypes.Descending
         };
-        
+
         // Act
         var expr = orderBy.ToExpression();
-        var compiled = expr.Compile();        
+        var compiled = expr.Compile();
         var value = compiled(entity);
 
         // Assert

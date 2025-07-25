@@ -15,7 +15,7 @@ public partial class PropertyUnitTests
     {
         // Arrande & Act
         var act = () => new Property<FakeEntity, Guid>(propertyName!);
-        
+
         // Assert
         act.Should().Throw<ValidationException>().WithMessage("O nome da propriedade é obrigatório");
     }

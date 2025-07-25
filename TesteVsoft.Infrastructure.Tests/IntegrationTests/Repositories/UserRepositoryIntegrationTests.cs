@@ -72,7 +72,7 @@ public class UserRepositoryIntegrationTests
 
         // Act
         await _repository.AddRangeAsync(users, CancellationToken.None);
-        
+
         // Assert
         foreach (var user in users)
         {
@@ -182,21 +182,21 @@ public class UserRepositoryIntegrationTests
     {
         // Arrange
         var user = User.Create(_faker.Person.FirstName, _faker.Internet.UserName(), "123", _faker.Internet.Email());
-                
+
         await _repository.AddAsync(user, CancellationToken.None);
 
-        var newName = "Updated User";        
+        var newName = "Updated User";
         var newUserName = "updated_user";
-        var newpassword = "new_password";        
+        var newpassword = "new_password";
         var newEmail = "new_email@email.com";
-        
+
         user.Update(newName, newUserName, "123", newpassword, newEmail);
-        
+
         // Act
         await _repository.UpdateAsync(user, CancellationToken.None);
 
         var updated = await _repository.GetOneByIdAsync(user.Id, CancellationToken.None);
-        
+
         // Assert
         updated!.Name.Should().Be(newName);
         updated!.UserName.Should().Be(newUserName);
@@ -247,7 +247,7 @@ public class UserRepositoryIntegrationTests
     {
         // Arrange
         var user = User.Create("Delete User", "delete_user1", "123", "delete_user1@email.com");
-        
+
         await _repository.AddAsync(user, CancellationToken.None);
 
         // Act
@@ -288,7 +288,7 @@ public class UserRepositoryIntegrationTests
 
         // Act
         var result = await _repository.CountAsync(CancellationToken.None);
-        
+
         // Assert
         result.Should().Be(2);
     }

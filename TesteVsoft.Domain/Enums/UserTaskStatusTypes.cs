@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace TesteVsoft.Domain.Enums;
+﻿namespace TesteVsoft.Domain.Enums;
 
 using System.ComponentModel.DataAnnotations;
 

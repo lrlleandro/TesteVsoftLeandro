@@ -27,7 +27,7 @@ public class CreateUserCommandHandlerUnitTests
     public async Task Handle_Should_CreateUser_When_UsernameIsUnique()
     {
         // Arrange
-        var command = new CreateUserCommand(_faker.Person.FirstName, 
+        var command = new CreateUserCommand(_faker.Person.FirstName,
             _faker.Internet.UserName(),
             _faker.Internet.Password(),
             _faker.Internet.Email());
@@ -36,7 +36,7 @@ public class CreateUserCommandHandlerUnitTests
 
         _userRepositoryMock.Setup(r => r.GetOneAsync(It.IsAny<Filter<User, Guid>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
-        
+
         _userRepositoryMock.Setup(r => r.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(user));
 

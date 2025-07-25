@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using TesteVsoft.Application.Common.Models;
 using TesteVsoft.Application.Tests.Fakes;
-using TesteVsoft.Domain.Entities.Common;
 
 namespace TesteVsoft.Application.Tests.UnitTests.Common.Models;
 

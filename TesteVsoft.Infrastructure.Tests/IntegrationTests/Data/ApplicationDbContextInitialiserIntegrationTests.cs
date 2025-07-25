@@ -15,7 +15,7 @@ public class ApplicationDbContextInitialiserIntegrationTests
     private ApplicationDbContext _context;
     private ApplicationDbContextInitialiser _initialiser;
     private Mock<ILogger<ApplicationDbContextInitialiser>> _loggerMock;
-    
+
     [SetUp]
     public async Task OneTimeSetup()
     {
@@ -45,7 +45,7 @@ public class ApplicationDbContextInitialiserIntegrationTests
 
         _context = new ApplicationDbContext(options);
         _loggerMock = new Mock<ILogger<ApplicationDbContextInitialiser>>();
-        
+
         _initialiser = new ApplicationDbContextInitialiser(
             _loggerMock.Object,
             _context);
@@ -67,7 +67,7 @@ public class ApplicationDbContextInitialiserIntegrationTests
     {
         // Arrange
         await _initialiser.ApplyMigrationsAsync();
-        
+
         // Act
         await _initialiser.SeedAsync();
 

@@ -14,3 +14,8 @@ export interface UserModel {
   userName: string;
   password?: string;
 }
+
+export interface AssignedUserModel {
+  id: string;
+  name: string;
+}

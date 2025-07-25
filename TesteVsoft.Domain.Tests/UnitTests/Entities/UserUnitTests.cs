@@ -1,5 +1,4 @@
 using Bogus;
-using Bogus.DataSets;
 using FluentAssertions;
 using TesteVsoft.Domain.Entities;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
@@ -27,7 +26,7 @@ public class UserUnitTests
         user!.Name.Should().BeNull();
         user.UserName.Should().BeNull();
         user.Password.Should().BeNull();
-        user.Password.Should().BeNull(); 
+        user.Password.Should().BeNull();
         user.Email.Should().BeNull();
         user.LastLoginOn.Should().BeNull();
     }

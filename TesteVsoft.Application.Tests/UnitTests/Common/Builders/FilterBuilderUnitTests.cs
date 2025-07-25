@@ -1,12 +1,9 @@
 ﻿using FluentAssertions;
-using NUnit.Framework;
-using System;
 using System.Linq.Expressions;
 using TesteVsoft.Application.Common.Builders;
 using TesteVsoft.Application.Common.Enums;
 using TesteVsoft.Application.Common.Models;
 using TesteVsoft.Application.Tests.Fakes;
-using TesteVsoft.Domain.Entities.Common;
 
 namespace TesteVsoft.Application.Tests.UnitTests.Common.Builders;
 
@@ -106,7 +103,7 @@ public class FilterBuilderUnitTests
         var order = filter.OrderBys[0];
 
         // Assert
-        filter.OrderBys.Should().ContainSingle();        
+        filter.OrderBys.Should().ContainSingle();
         order.PropertyName.Name.Should().Be(nameof(FakeEntity.Age));
         order.Direction.Should().Be(OrderDirectionTypes.Descending);
     }

@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using TesteVsoft.Application.Commands;
 using TesteVsoft.Application.Dtos;
 using TesteVsoft.Application.Interfaces.CQRS;
 
@@ -8,5 +9,7 @@ public class UserTaskAssignedToUserConsumer(IEventDispatcher eventDispatcher) : 
 {
     public async Task Consume(ConsumeContext<UserTaskAssignedToUserDto> context)
     {
+        var command = new SendUserTaskAssignedToUserEmailCommand(context.Message.UserTaskId);
+        await eventDispatcher.SendAsync(command, context.CancellationToken);
     }
 }

@@ -43,7 +43,7 @@ public class EventDispatcherUnitFakes
         // Assert
         fakeCommandHandler.Handled.Should().BeTrue();
     }
-    
+
     [Test]
     public async Task SendAsync_Should_Return_Response()
     {

@@ -3,6 +3,6 @@
 namespace TesteVsoft.Application.Tests.Fakes;
 
 public class OtherEntity : BaseEntity<Guid>
-{ 
+{
 }
 

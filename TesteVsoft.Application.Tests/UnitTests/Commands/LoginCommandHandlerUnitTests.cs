@@ -97,7 +97,7 @@ public class LoginCommandHandlerUnitTests
         // Arrange
         var user = CreateUser();
         var command = new LoginCommand(user.UserName, "wrongpass");
-        
+
 
         _userRepositoryMock
             .Setup(x => x.GetOneAsync(It.IsAny<Filter<User, Guid>>(), It.IsAny<CancellationToken>()))

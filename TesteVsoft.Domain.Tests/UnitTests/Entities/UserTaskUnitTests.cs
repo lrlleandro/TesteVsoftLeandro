@@ -1,8 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Bogus;
+﻿using Bogus;
 using FluentAssertions;
-using NUnit.Framework;
 using TesteVsoft.Domain.Entities;
 using TesteVsoft.Domain.Enums;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
@@ -22,7 +19,7 @@ public class UserTaskUnitTests
 
     private User GenerateUser()
     {
-        return User.Create(_faker.Name.FirstName(), 
+        return User.Create(_faker.Name.FirstName(),
             _faker.Internet.UserName(),
             _faker.Internet.Password(),
             _faker.Internet.Email());
@@ -96,18 +93,6 @@ public class UserTaskUnitTests
         Action act = () => task.ChangeStatus((UserTaskStatusTypes)999);
 
         act.Should().Throw<ValidationException>().WithMessage("Status inválido");
-    }
-
-    [Test]
-    public void ChangeStatus_WhenCompleted_ShouldThrow()
-    {
-        var task = new UserTask("Test", "Desc");
-        task.ChangeStatus(UserTaskStatusTypes.Completed);
-
-        Action act = () => task.ChangeStatus(UserTaskStatusTypes.Pending);
-
-        act.Should().Throw<ValidationException>()
-            .WithMessage("Tarefas concluídas não podem ser alteradas");
     }
 
     [Test]

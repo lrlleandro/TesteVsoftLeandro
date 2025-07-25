@@ -1,5 +1,3 @@
-using Aspire.Hosting;
-
 var builder = DistributedApplication.CreateBuilder(args);
 var databaseName = "teste-vsoft-db";
 
@@ -24,5 +22,14 @@ var apiService = builder.AddProject<Projects.TesteVsoft_ApiService>("api-service
     .WaitFor(messaging)
     .WaitFor(db)
     .WaitForCompletion(migrationService);
+
+builder.AddContainer("frontend", "node:20-alpine")
+    .WithImage("frontend:dev")
+    .WithDockerfile("../TesteVsoft.Frontend")
+    .WithContainerName("frontend")
+    .WithImageTag("dev")
+    .WithEnvironment("NODE_ENV", "development")
+    .WithExternalHttpEndpoints()
+    .WithEndpoint(port: 5173, targetPort: 5173, scheme: "http");
 
 builder.Build().Run();

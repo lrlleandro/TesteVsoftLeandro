@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'kanban',
+      name: 'tasks',
       component: () => import('../views/TasksView.vue'),
       meta: { requiresAuth: true },
     },

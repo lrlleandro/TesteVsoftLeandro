@@ -1,4 +1,4 @@
-﻿namespace TesteVsoft.Application.Dtos;
+namespace TesteVsoft.Application.Dtos;
 
 public class UserTaskAssignedToUserDto
 {

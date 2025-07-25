@@ -62,11 +62,6 @@ public class UserTask : BaseEntity<Guid>
             return;
         }
 
-        if (Status == UserTaskStatusTypes.Completed)
-        {
-            throw new ValidationException("Tarefas concluídas não podem ser alteradas");   
-        }
-
         Status = status;
         UpdatedAt = DateTime.UtcNow;
     }
@@ -84,7 +79,9 @@ public class UserTask : BaseEntity<Guid>
 
     private void ChangeDueDate(DateTime dueDate)
     {
-        if (dueDate.ToUniversalTime() < DateTime.UtcNow)
+        var dueDateUtc = dueDate.ToUniversalTime();
+
+        if (dueDateUtc.Date < DateTime.UtcNow.Date)
         {
             throw new ValidationException("A data de vencimento não deve ser menor que a data atual");
         }

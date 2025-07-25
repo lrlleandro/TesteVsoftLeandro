@@ -2,7 +2,6 @@ using Bogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using TesteVsoft.Domain.Entities;
 using TesteVsoft.Infrastructure.Security;
 
@@ -76,6 +75,6 @@ public class JwtTokenGeneratorUnitTests
         jwt.Audiences.Should().Contain("TestAudience");
         jwt.ValidTo.Should().BeAfter(DateTime.UtcNow);
         tokenDto.UserId.Should().Be(user.Id);
-         tokenDto.UserName.Should().Be(user.UserName);
+        tokenDto.UserName.Should().Be(user.UserName);
     }
 }

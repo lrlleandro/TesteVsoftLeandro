@@ -9,7 +9,7 @@ public interface IFakeScopedService
 
 [Scoped]
 public class FakeScopedService : IFakeScopedService
-{ 
+{
     public string Ping()
     {
         return "pong";

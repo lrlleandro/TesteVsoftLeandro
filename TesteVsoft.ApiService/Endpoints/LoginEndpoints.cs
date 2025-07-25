@@ -18,6 +18,6 @@ public static class LoginEndpoints
         .WithTags("Auth");
     }
 
-    
+
 }
 

@@ -59,5 +59,5 @@ public class LoginEndpointsIntegrationTests
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }    
+    }
 }

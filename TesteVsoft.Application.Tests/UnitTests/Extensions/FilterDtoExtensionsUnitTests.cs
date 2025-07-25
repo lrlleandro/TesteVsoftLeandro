@@ -1,13 +1,8 @@
 using FluentAssertions;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using TesteVsoft.Application.Common.Enums;
 using TesteVsoft.Application.Common.Extensions;
 using TesteVsoft.Application.Dtos;
 using TesteVsoft.Application.Tests.Fakes;
-using TesteVsoft.Domain.Entities;
-using TesteVsoft.Domain.Entities.Common;
 
 namespace TesteVsoft.Application.Tests.UnitTests.Extensions;
 
@@ -57,20 +52,20 @@ public class FilterDtoExtensionsUnitTests
             PageSize = 20,
             OrderBys = new List<OrderByDto>
             {
-                new OrderByDto 
-                { 
+                new OrderByDto
+                {
                     PropertyName = "Name",
-                    Direction = OrderDirectionTypes.Descending 
+                    Direction = OrderDirectionTypes.Descending
                 }
             },
             Selects = new List<string> { "Name" },
             Relations = new List<string> { "Related" },
             Wheres = new List<WhereDto>
             {
-                new WhereDto 
-                { 
-                    PropertyName = "Age", 
-                    Operation = WhereOperationTypes.Equal, 
+                new WhereDto
+                {
+                    PropertyName = "Age",
+                    Operation = WhereOperationTypes.Equal,
                     Value = "10"
                 }
             }
