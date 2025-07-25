@@ -19,4 +19,5 @@ using (var scope = host.Services.CreateScope())
 {
     var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
     await initialiser.ApplyMigrationsAsync();
+    await initialiser.SeedAsync();
 }

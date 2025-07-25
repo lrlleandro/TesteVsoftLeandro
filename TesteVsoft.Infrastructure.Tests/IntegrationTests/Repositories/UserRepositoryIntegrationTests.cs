@@ -277,6 +277,22 @@ public class UserRepositoryIntegrationTests
         result2.Should().BeNull();
     }
 
+    [Test]
+    public async Task Should_Count()
+    {
+        // Arrange
+        var user1 = User.Create("delete_user1", "delete_user1_name", "123", "delete_user1@email.com");
+        var user2 = User.Create("delete_user2", "delete_user2_name", "123", "delete_user2@email.com");
+
+        await _repository.AddRangeAsync([user1, user2], CancellationToken.None);
+
+        // Act
+        var result = await _repository.CountAsync(CancellationToken.None);
+        
+        // Assert
+        result.Should().Be(2);
+    }
+
     [TearDown]
     public async Task Cleanup()
     {

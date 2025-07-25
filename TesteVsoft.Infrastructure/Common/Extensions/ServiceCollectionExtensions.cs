@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
 
         var connectionString = configuration.GetConnectionString("teste-vsoft-db");
         services.AddNpgsql<ApplicationDbContext>(connectionString);
-
+        
         return services;
     }
 

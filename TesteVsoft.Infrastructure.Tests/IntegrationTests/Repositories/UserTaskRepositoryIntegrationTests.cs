@@ -314,6 +314,24 @@ public class UserTaskRepositoryIntegrationTests
         result2.Should().BeNull();
     }
 
+    [Test]
+    public async Task Should_Count()
+    {
+        // Arrange
+        var user1 = CreateUser();
+        var user2 = CreateUser();
+        var UserTask1 = CreateUserTask(user1);
+        var UserTask2 = CreateUserTask(user2);
+
+        await _repository.AddRangeAsync([UserTask1, UserTask2], CancellationToken.None);
+
+        // Act
+        var result = await _repository.CountAsync(CancellationToken.None);
+
+        // Assert
+        result.Should().Be(2);
+    }
+
     [TearDown]
     public async Task Cleanup()
     {
