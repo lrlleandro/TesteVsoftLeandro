@@ -10,6 +10,7 @@ using TesteVsoft.ApiService.Endpoints;
 using TesteVsoft.ApiService.Extensions;
 using TesteVsoft.ApiService.Workers;
 using TesteVsoft.Infrastructure.Common.Extensions;
+using TesteVsoft.Infrastructure.Common.Serialization;
 using TesteVsoft.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -117,6 +118,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.SerializerOptions.Converters.Add(new MailAddressConverter());
 });
 
 builder.Services.AddHostedService<UserCreationWorker>();
@@ -134,5 +136,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapLoginEndpoints();
+app.MapUsersEndpoints();
 
 app.Run();

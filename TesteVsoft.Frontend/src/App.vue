@@ -21,6 +21,7 @@ const showHeader = computed(() => route.path !== '/login');
         <img alt="Vue logo" class="logo h-10 mr-4" src="./assets/logo.svg" />
         <nav>
           <RouterLink to="/" class="mr-4 hover:text-gray-300">Tarefas</RouterLink>
+          <RouterLink to="/users" class="mr-4 hover:text-gray-300">Usuários</RouterLink>
           <RouterLink v-if="!isLoggedIn" to="/login" class="hover:text-gray-300">Login</RouterLink>
         </nav>
       </div>

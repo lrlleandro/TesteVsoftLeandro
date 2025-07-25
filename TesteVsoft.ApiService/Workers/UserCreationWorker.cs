@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using TesteVsoft.Application.Interfaces.BackgroundServices;
+﻿using TesteVsoft.Application.Interfaces.BackgroundServices;
 using TesteVsoft.Application.Interfaces.Repositories;
 
 namespace TesteVsoft.ApiService.Workers;
@@ -30,7 +27,7 @@ public class UserCreationWorker : BackgroundService
                 using var scope = _scopeFactory.CreateScope();
                 var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
 
-                await task!(userRepository, stoppingToken);
+                await task(userRepository, stoppingToken);
             }
             catch (Exception ex)
             {
