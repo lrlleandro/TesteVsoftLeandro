@@ -72,12 +72,17 @@ public class UserRepositoryIntegrationTests
 
         // Act
         await _repository.AddRangeAsync(users, CancellationToken.None);
-
+        
         // Assert
         foreach (var user in users)
         {
             var found = await _repository.GetOneByIdAsync(user.Id, CancellationToken.None);
             found.Should().NotBeNull();
+            found!.Id.Should().Be(user.Id);
+            found.Name.Should().Be(user.Name);
+            found.UserName.Should().Be(user.UserName);
+            found.Password.Should().Be(user.Password);
+            found.Email.Should().Be(user.Email);
         }
     }
 
@@ -85,19 +90,23 @@ public class UserRepositoryIntegrationTests
     public async Task Should_GetOne_With_Filter()
     {
         // Arrange
-        var user = User.Create("specific_user", _faker.Internet.UserName(), _faker.Internet.Password(), _faker.Internet.Email());
+        var user = User.Create(_faker.Name.FirstName(), _faker.Internet.UserName(), _faker.Internet.Password(), _faker.Internet.Email());
         await _repository.AddAsync(user, CancellationToken.None);
 
         // Act
         var filter = new FilterBuilder<User, Guid>()
-            .AddWhere(u => u.Name, WhereOperationTypes.Equal, "specific_user")
+            .AddWhere(u => u.Name, WhereOperationTypes.Equal, user.Name)
             .Build();
 
         var found = await _repository.GetOneAsync(filter, CancellationToken.None);
 
         // Assert
         found.Should().NotBeNull();
-        found!.Name.Should().Be("specific_user");
+        found!.Id.Should().Be(user.Id);
+        found.Name.Should().Be(user.Name);
+        found.UserName.Should().Be(user.UserName);
+        found.Password.Should().Be(user.Password);
+        found.Email.Should().Be(user.Email);
     }
 
     [Test]
@@ -105,7 +114,7 @@ public class UserRepositoryIntegrationTests
     {
         // Arrange
         var users = Enumerable.Range(1, 10)
-            .Select(_ => User.Create(_faker.Person.FullName, _faker.Internet.UserName(), _faker.Internet.Password(), _faker.Internet.Email()))
+            .Select(_ => User.Create(_faker.Name.FirstName(), _faker.Internet.UserName(), _faker.Internet.Password(), _faker.Internet.Email()))
             .ToList();
 
         // Act
@@ -114,14 +123,14 @@ public class UserRepositoryIntegrationTests
         var filter = new FilterBuilder<User, Guid>()
             .WithPage(1)
             .WithPageSize(5)
-            .AddOrderBy(u => u.UserName, OrderDirectionTypes.Ascending)
+            .AddOrderBy(u => u.Name, OrderDirectionTypes.Ascending)
             .Build();
 
         var result = await _repository.GetPaginatedAsync(filter, CancellationToken.None);
 
         // Assert
         result.Items.Should().HaveCount(5);
-        result.Items.Select(u => u.UserName).Should().BeInAscendingOrder(StringComparer.InvariantCultureIgnoreCase);
+        result.Items.Select(u => u.Name).Should().BeInAscendingOrder(StringComparer.InvariantCultureIgnoreCase);
         result.TotalCount.Should().Be(10);
     }
 
