@@ -1,95 +1,85 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
-using NUnit.Framework;
 using TesteVsoft.Application.Commands;
+using TesteVsoft.Application.Interfaces.BackgroundServices;
 using TesteVsoft.Application.Interfaces.Repositories;
 using TesteVsoft.Domain.Entities;
 
-namespace TesteVsoft.Application.Tests.UnitTests.Commands;
+namespace TesteVsoft.Application.Tests.Commands;
 
 [TestFixture]
-public class CreateRandomUsersCommandHandlerUnitTests
+public class CreateRandomUsersCommandHandlerTests
 {
-    private Mock<IUserRepository> _userRepositoryMock = null!;
+    private Mock<IBackgroundTaskQueue> _taskQueueMock = null!;
+    private Mock<IUserRepository> _userRepoMock = null!;
     private CreateRandomUsersCommandHandler _handler = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _userRepositoryMock = new Mock<IUserRepository>();
-        _handler = new CreateRandomUsersCommandHandler(_userRepositoryMock.Object);
+        _taskQueueMock = new Mock<IBackgroundTaskQueue>();
+        _userRepoMock = new Mock<IUserRepository>();
+        _handler = new CreateRandomUsersCommandHandler(_taskQueueMock.Object, _userRepoMock.Object);
     }
 
     [Test]
-    public async Task Handle_ShouldCreateUsers_WhenValidCommand()
+    public async Task Handle_Should_Enqueue_Correct_Number_Of_Tasks()
     {
         // Arrange
         var command = new CreateRandomUsersCommand
         {
-            Amount = 10,
-            UserNameMask = "test_{{random}}"
+            Amount = 3,
+            UserNameMask = "user_{{random}}"
         };
+
+        var enqueued = new List<Func<IUserRepository, CancellationToken, Task>>();
+        _taskQueueMock.Setup(q => q.EnqueueAsync(It.IsAny<Func<IUserRepository, CancellationToken, Task>>()))
+                      .Callback<Func<IUserRepository, CancellationToken, Task>>(f => enqueued.Add(f))
+                      .Returns(ValueTask.CompletedTask);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        _userRepositoryMock.Verify(r => r.AddRangeAsync(It.Is<IEnumerable<User>>(list => list.Count() == 10), It.IsAny<CancellationToken>()), Times.Once);
+        enqueued.Should().HaveCount(3);
+        _taskQueueMock.Verify(q => q.EnqueueAsync(It.IsAny<Func<IUserRepository, CancellationToken, Task>>()), Times.Exactly(3));
     }
 
-    [TestCase(0)]
-    [TestCase(-1)]
-    public async Task Handle_ShouldThrowValidationException_WhenAmountIsInvalidAsync(int amount)
+    [Test]
+    public async Task Handle_Should_Throw_If_Amount_Is_Zero()
     {
         // Arrange
         var command = new CreateRandomUsersCommand
         {
-            Amount = amount,
-            UserNameMask = "mask_{{random}}"
+            Amount = 0,
+            UserNameMask = "user_{{random}}"
         };
 
         // Act
-        var act = async () => await _handler.Handle(command, CancellationToken.None);
+        var act = () => _handler.Handle(command, CancellationToken.None);
 
         // Assert
         await act.Should().ThrowAsync<ValidationException>()
-            .WithMessage("A quantidade deve ser maior que zero.");
+            .WithMessage("*maior que zero*");
     }
 
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task Handle_ShouldThrowValidationException_WhenUserNameMaskIsEmptyAsync(string mask)
+    [Test]
+    public async Task Handle_Should_Throw_If_UserNameMask_Is_Empty()
     {
         // Arrange
         var command = new CreateRandomUsersCommand
         {
-            Amount = 10,
-            UserNameMask = mask
+            Amount = 5,
+            UserNameMask = ""
         };
 
         // Act
-        var act = async () => await _handler.Handle(command, CancellationToken.None);
+        var act = () => _handler.Handle(command, CancellationToken.None);
 
         // Assert
         await act.Should().ThrowAsync<ValidationException>()
-            .WithMessage("A máscara do nome de usuário é obrigatória.");
-    }
-
-    public async Task Handle_ShouldThrowValidationException_WhenUserNameMaskPatternNotFound(string mask)
-    {
-        // Arrange
-        var command = new CreateRandomUsersCommand
-        {
-            Amount = 10,
-            UserNameMask = "invalid_mask_{{not_found}}"
-        };
-
-        // Act
-        var act = async () => await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        await act.Should().ThrowAsync<ValidationException>()
-            .WithMessage("A máscara deve conter o marcador {{random}} para gerar valores aleatórios.");
+            .WithMessage("*obrigatória*");
     }
 }

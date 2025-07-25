@@ -13,35 +13,34 @@ public class CreateRandomUsersCommand : ICommand
     public string UserNameMask { get; set; } = string.Empty;
 }
 
-public class CreateRandomUsersCommandHandler(IUserRepository userRepository)
+public class CreateRandomUsersCommandHandler(IBackgroundTaskQueue taskQueue, IUserRepository userRepository) 
     : ICommandHandler<CreateRandomUsersCommand>
 {
-    public async Task Handle(CreateRandomUsersCommand command, CancellationToken cancellationToken)
+    public Task Handle(CreateRandomUsersCommand command, CancellationToken cancellationToken)
     {
         Validate(command);
 
-        var tasks = new List<Task<User>>();
-
-        for (int i = 0; i < command.Amount; i++)
+        Enumerable.Range(0, command.Amount).ToList().ForEach(_ =>
         {
-            tasks.Add(Task.Run(() => User.CreateRandom(command.UserNameMask)));
-        }
+            taskQueue.EnqueueAsync(async (userRepo, ct) =>
+            {
+                await userRepo.AddAsync(User.CreateRandom(command.UserNameMask), ct);
+            });
+        });
 
-        var users = await Task.WhenAll(tasks);
-
-        await userRepository.AddRangeAsync(users, cancellationToken);
+        return Task.CompletedTask;
     }
 
     private void Validate(CreateRandomUsersCommand command)
     {
         if (command.Amount <= 0)
         {
-            throw new ValidationException("A quantidade deve ser maior que zero.");
+            throw new ValidationException("A quantidade deve ser maior que zero");
         }
 
         if (string.IsNullOrWhiteSpace(command.UserNameMask))
         {
-            throw new ValidationException("A máscara do nome de usuário é obrigatória.");
+            throw new ValidationException("A máscara do nome de usuário é obrigatória");
         }
     }
 }

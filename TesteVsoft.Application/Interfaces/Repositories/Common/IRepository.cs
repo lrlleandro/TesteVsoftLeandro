@@ -16,4 +16,5 @@ public interface IRepository<TEntity, TId>
     Task RemoveRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
     Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
     Task<IEnumerable<TEntity>> UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
+    Task<int> CountAsync(CancellationToken cancellationToken);
 }

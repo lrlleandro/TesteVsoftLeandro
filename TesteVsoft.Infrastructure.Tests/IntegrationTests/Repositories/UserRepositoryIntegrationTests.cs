@@ -130,7 +130,7 @@ public class UserRepositoryIntegrationTests
     {
         // Arrange
         var users = Enumerable.Range(1, 10)
-            .Select(_ => User.Create(_faker.Person.FullName, _faker.Internet.UserName(), _faker.Internet.Password(), _faker.Internet.Email()))
+            .Select(_ => User.Create(_faker.Name.FirstName(), _faker.Internet.UserName(), _faker.Internet.Password(), _faker.Internet.Email()))
             .ToList();
 
         // Act
@@ -139,14 +139,14 @@ public class UserRepositoryIntegrationTests
         var filter = new FilterBuilder<User, Guid>()
             .WithPage(1)
             .WithPageSize(5)
-            .AddOrderBy(u => u.UserName, OrderDirectionTypes.Descending)
+            .AddOrderBy(u => u.Name, OrderDirectionTypes.Descending)
             .Build();
 
         var result = await _repository.GetPaginatedAsync(filter, CancellationToken.None);
 
         // Assert
         result.Items.Should().HaveCount(5);
-        result.Items.Select(u => u.UserName).Should().BeInDescendingOrder(StringComparer.InvariantCultureIgnoreCase);
+        result.Items.Select(u => u.Name).Should().BeInDescendingOrder(StringComparer.InvariantCultureIgnoreCase);
         result.TotalCount.Should().Be(10);
     }
 

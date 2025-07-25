@@ -53,95 +53,93 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
     }
 
     public async Task<PaginatedList<TEntity, TId>> GetPaginatedAsync(Filter<TEntity, TId> filter, CancellationToken cancellationToken)
-{
-    var query = _dbSet.AsQueryable();
-
-    foreach (var whereClause in filter.Wheres)
     {
-        query = query.Where(whereClause.ToExpression());
-    }
+        var query = _dbSet.AsQueryable();
 
-    IOrderedQueryable<TEntity>? orderedQuery = null;
-
-    foreach (var orderByClause in filter.OrderBys)
-    {
-        var expression = orderByClause.ToExpression();
-
-        if (orderedQuery == null)
+        foreach (var whereClause in filter.Wheres)
         {
-            orderedQuery = orderByClause.Direction == OrderDirectionTypes.Ascending
-                ? query.OrderBy(expression)
-                : query.OrderByDescending(expression);
+            query = query.Where(whereClause.ToExpression());
         }
-        else
+
+        bool first = true;
+        foreach (var order in filter.OrderBys)
         {
-            orderedQuery = orderByClause.Direction == OrderDirectionTypes.Ascending
-                ? orderedQuery.ThenBy(expression)
-                : orderedQuery.ThenByDescending(expression);
+            if (first)
+            {
+                query = order.Direction == OrderDirectionTypes.Descending
+                    ? query.OrderByDescending(order.ToExpression())
+                    : query.OrderBy(order.ToExpression());
+                first = false;
+            }
+            else
+            {
+                query = order.Direction == OrderDirectionTypes.Descending
+                    ? ((IOrderedQueryable<TEntity>)query).ThenByDescending(order.ToExpression())
+                    : ((IOrderedQueryable<TEntity>)query).ThenBy(order.ToExpression());
+            }
         }
+
+        if (filter.OrderBys.Count == 0)
+        {
+            query = query.OrderBy(x => x.Id);
+        }
+
+        foreach (var relation in filter.WithRelations)
+        {
+            query = query.Include(relation.ToExpression());
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((filter.Page - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PaginatedList<TEntity, TId>(items, totalCount, filter.Page, filter.PageSize);
     }
-
-    if (orderedQuery != null)
-        query = orderedQuery;
-    else
-        query = query.OrderBy(x => x.Id);
-
-    foreach (var relation in filter.WithRelations)
-    {
-        query = query.Include(relation.ToExpression());
-    }
-
-    var totalCount = await query.CountAsync(cancellationToken);
-
-    var items = await query
-        .Skip((filter.Page - 1) * filter.PageSize)
-        .Take(filter.PageSize)
-        .ToListAsync(cancellationToken);
-
-    return new PaginatedList<TEntity, TId>(items, totalCount, filter.Page, filter.PageSize);
-}
 
     public async Task<IEnumerable<TEntity>> GetAsync(Filter<TEntity, TId> filter, CancellationToken cancellationToken)
-{
-    var query = _dbSet.AsQueryable();
-
-    foreach (var whereClause in filter.Wheres)
     {
-        query = query.Where(whereClause.ToExpression());
-    }
+        var query = _dbSet.AsQueryable();
 
-    IOrderedQueryable<TEntity>? orderedQuery = null;
-
-    foreach (var orderByClause in filter.OrderBys)
-    {
-        var expression = orderByClause.ToExpression();
-
-        if (orderedQuery == null)
+        foreach (var whereClause in filter.Wheres)
         {
-            orderedQuery = orderByClause.Direction == OrderDirectionTypes.Ascending
-                ? query.OrderBy(expression)
-                : query.OrderByDescending(expression);
+            query = query.Where(whereClause.ToExpression());
         }
+
+        IOrderedQueryable<TEntity>? orderedQuery = null;
+
+        foreach (var orderByClause in filter.OrderBys)
+        {
+            var expression = orderByClause.ToExpression();
+
+            if (orderedQuery == null)
+            {
+                orderedQuery = orderByClause.Direction == OrderDirectionTypes.Ascending
+                    ? query.OrderBy(expression)
+                    : query.OrderByDescending(expression);
+            }
+            else
+            {
+                orderedQuery = orderByClause.Direction == OrderDirectionTypes.Ascending
+                    ? orderedQuery.ThenBy(expression)
+                    : orderedQuery.ThenByDescending(expression);
+            }
+        }
+
+        if (orderedQuery != null)
+            query = orderedQuery;
         else
-        {
-            orderedQuery = orderByClause.Direction == OrderDirectionTypes.Ascending
-                ? orderedQuery.ThenBy(expression)
-                : orderedQuery.ThenByDescending(expression);
-        }
+            query = query.OrderBy(x => x.Id);
+
+        var items = await query
+            .Skip((filter.Page - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
+
+        return items;
     }
-
-    if (orderedQuery != null)
-        query = orderedQuery;
-    else
-        query = query.OrderBy(x => x.Id);
-
-    var items = await query
-        .Skip((filter.Page - 1) * filter.PageSize)
-        .Take(filter.PageSize)
-        .ToListAsync(cancellationToken);
-
-    return items;
-}
 
     public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
@@ -170,5 +168,11 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
     {
         _dbSet.RemoveRange(entities);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<int> CountAsync(CancellationToken cancellationToken)
+    {
+        var count = await _dbSet.CountAsync(cancellationToken);
+        return count;
     }
 }

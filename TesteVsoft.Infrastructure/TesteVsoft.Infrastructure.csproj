@@ -29,9 +29,5 @@
   <ItemGroup>
     <ProjectReference Include="..\TesteVsoft.Application\TesteVsoft.Application.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="BackgroundServices\WorkItems\" />
-  </ItemGroup>
 
 </Project>

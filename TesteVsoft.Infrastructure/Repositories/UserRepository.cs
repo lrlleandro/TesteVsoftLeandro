@@ -6,7 +6,7 @@ using TesteVsoft.Infrastructure.Repositories.Common;
 
 namespace TesteVsoft.Infrastructure.Repositories;
 
-[Scoped]
+[Transient]
 public sealed class UserRepository : BaseRepository<User, Guid>, IUserRepository
 {
     public UserRepository(ApplicationDbContext context) : base(context)

@@ -28,7 +28,7 @@ public class DeleteUserCommandHandlerUnitTests
     public async Task Handle_ShouldDeleteUser_WhenUserExists()
     {
         // Arrange
-        var user = User.CreateRandom("user_");
+        var user = User.CreateRandom("user_{{random}}");
         var command = new DeleteUserCommand(user.Id);
 
         _userRepositoryMock
